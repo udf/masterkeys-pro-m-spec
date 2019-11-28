@@ -10,7 +10,17 @@
 
 const size_t fft_size = 8192;
 const size_t sample_rate = 44100;
-const size_t num_bars = 10;
+const size_t num_bars = 60;
+
+constexpr ssize_t matrix_to_bar[CMMKProM::key_map_rows][CMMKProM::key_map_cols] = {
+    //                                    V
+    {59, 48, 47, 36, 35, 24, 23, 12, 11,  0, 11, 12, 23, 24, 35, 36, 47, 48, 59},
+    {58, 49, 46, 37, 34, 25, 22, 13, 10,  1, 10, 13, 22, 25, 34, 37, 46, 49, 58},
+    {57, 50, 45, 38, 33, 26, 21, 14,  9,  2,  9, 14, 21, 26, 33, 38, 45, 50, 57},
+    {56, 51, 44, 39, 32, 27, 20, 15,  8,  3,  8, 15, 20, 27, 32, 39, 44, 51, 56},
+    {55, 52, 43, 40, 31, 28, 19, 16,  7,  4,  7, 16, 19, 28, 31, 40, 43, 52, 55},
+    {54, 53, 42, 41, 30, 29, 18, 17,  6,  5,  6, 17, 18, 29, 30, 41, 42, 53, 54}
+};
 
 void run(CMMKProM &kb) {
     float audio_data[fft_size];
@@ -62,7 +72,7 @@ void run(CMMKProM &kb) {
 
         for (size_t x = 0; x < CMMKProM::key_map_cols; x++) {
             for (size_t y = 0; y < CMMKProM::key_map_rows; y++) {
-                matrix[y][x].r = out_bar_data[col_to_bar[x]];
+                matrix[y][x].r = out_bar_data[matrix_to_bar[y][x]];
             }
         }
 
