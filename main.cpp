@@ -32,7 +32,7 @@ void run(CMMKProM &kb) {
     );
 
     Spectrum spec(fft_size);
-    spec.UseLinearNormalisation(1, num_bars);
+    spec.UseLinearNormalisation(1, num_bars * 2);
     spec.average_weight = 0.7;
     spec.scale = 1;
 
@@ -48,12 +48,12 @@ void run(CMMKProM &kb) {
         audio_fetcher.UpdateData();
         audio_fetcher.GetData(audio_data);
         spec.Update(audio_data);
-        spec.GetData(50, 5000, sample_rate, bar_data, num_bars);
+        spec.GetData(50, 2500, sample_rate, bar_data, num_bars);
 
-        const float scale = std::clamp(1 / std::max(avg_max, 0.1f), 1.f, 4.f);
+        const float scale = std::clamp(1 / std::max(avg_max, 0.1f), 1.f, 10.f);
         float max = 0;
         for (size_t i = 0; i < num_bars; i++) {
-            float val = std::pow(bar_data[i], 2.0f);
+            float val = std::pow(bar_data[i], 1.5f);
             max = std::max(max, val);
             out_bar_data[i] = (uint8_t)(std::clamp(val * scale * 255.0f, 1.0f, 255.0f));
         }
